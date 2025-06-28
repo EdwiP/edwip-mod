@@ -131,7 +131,7 @@ public class ConfigScreen {
                         Change letters capitalization.
                         
                         Example: heLLo WOrlD!
-                        Lower all -> hello world!
+                        Lower All -> hello world!
                         Upper All -> HELLO WORLD!
                         First Letter -> Hello world!
                         First Every Letter -> Hello World!
