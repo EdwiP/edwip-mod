@@ -1,9 +1,7 @@
 package com.edwip.Addons;
 
-import com.edwip.Main;
 import com.edwip.Menu.ModConfig;
 import com.edwip.Utils.DiscordMessages;
-import com.terraformersmc.modmenu.util.mod.Mod;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -21,12 +19,12 @@ public class DiscordChatLog {
     public static void doDiscordChatLog() {
         new Thread(DiscordChatLog::processQueue).start();
         if (!ModConfig.discordOpenGameMessage.isEmpty()) {
-            sendMessage(ModConfig.discordOpenGameMessage.replace("<PLAYER>",ModConfig.discordUserName));
+            sendMessage(ModConfig.discordOpenGameMessage.replace("<PLAYER>", ModConfig.discordUserName));
         }
         ClientLifecycleEvents.CLIENT_STOPPING.register(minecraftClient -> {
             // Send message to Discord when game is closing
             if (!ModConfig.discordCloseGameMessage.isEmpty()) {
-                sendMessage(ModConfig.discordCloseGameMessage.replace("<PLAYER>",ModConfig.discordUserName));
+                sendMessage(ModConfig.discordCloseGameMessage.replace("<PLAYER>", ModConfig.discordUserName));
             }
         });
         ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, minecraftClient) -> {
@@ -35,13 +33,13 @@ public class DiscordChatLog {
                     : "Singleplayer";
             lastServer = serverName;
             if (!ModConfig.discordJoinServerMessage.isEmpty()) {
-                sendMessage(ModConfig.discordJoinServerMessage.replace("<SERVER>",serverName).replace("<PLAYER>",ModConfig.discordUserName));
+                sendMessage(ModConfig.discordJoinServerMessage.replace("<SERVER>", serverName).replace("<PLAYER>", ModConfig.discordUserName));
             }
         });
 
         ClientPlayConnectionEvents.DISCONNECT.register((handler, sender) -> {
             if (!ModConfig.discordLeaveServerMessage.isEmpty()) {
-                sendMessage(ModConfig.discordLeaveServerMessage.replace("<SERVER>",lastServer).replace("<PLAYER>",ModConfig.discordUserName));
+                sendMessage(ModConfig.discordLeaveServerMessage.replace("<SERVER>", lastServer).replace("<PLAYER>", ModConfig.discordUserName));
             }
         });
 
@@ -51,12 +49,14 @@ public class DiscordChatLog {
         ClientReceiveMessageEvents.GAME.register((text, bob) -> {
             sendMessage(text.getString());
         });
-    };
+    }
 
 
     private static void sendMessage(String content) {
-        if (ModConfig.enableDiscordChatLog) messageQueue.offer(new AbstractMap.SimpleEntry<>(content, Math.toIntExact(Instant.now().getEpochSecond())));
+        if (ModConfig.enableDiscordChatLog)
+            messageQueue.offer(new AbstractMap.SimpleEntry<>(content, Math.toIntExact(Instant.now().getEpochSecond())));
     }
+
     private static void processQueue() {
         while (true) {
             try {

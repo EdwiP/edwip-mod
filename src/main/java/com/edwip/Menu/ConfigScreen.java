@@ -49,7 +49,6 @@ public class ConfigScreen {
                 .build());
 
 
-
         // Kick Commands
         ConfigCategory kick = builder.getOrCreateCategory(Text.of("Kick Settings"));
         kick.addEntry(entryBuilder
@@ -93,7 +92,7 @@ public class ConfigScreen {
                 .build()
         );
         kick.addEntry(entryBuilder
-                .startEnumSelector(Text.of("Second Command Letters Capitalization"),LettersCapitalization.lettersCapitalization.class, ModConfig.kickSecondLetters)
+                .startEnumSelector(Text.of("Second Command Letters Capitalization"), LettersCapitalization.lettersCapitalization.class, ModConfig.kickSecondLetters)
                 .setDefaultValue(LettersCapitalization.lettersCapitalization.LOWER_ALL)
                 .setSaveConsumer(newValue -> ModConfig.kickSecondLetters = newValue)
                 .setTooltip(Text.of("""
@@ -110,7 +109,7 @@ public class ConfigScreen {
         );
 
         kick.addEntry(entryBuilder
-                .startIntSlider(Text.of("Second Command Time"), ModConfig.kickSecondTime,0,1000)
+                .startIntSlider(Text.of("Second Command Time"), ModConfig.kickSecondTime, 0, 1000)
                 .setDefaultValue(500)
                 .setSaveConsumer(newValue -> ModConfig.kickSecondTime = newValue)
                 .setTooltip(Text.of("""
@@ -134,7 +133,7 @@ public class ConfigScreen {
                 .build()
         );
         warn.addEntry(entryBuilder
-                .startEnumSelector(Text.of("Warn Letters Capitalization"),LettersCapitalization.lettersCapitalization.class , ModConfig.warnReasonLetters)
+                .startEnumSelector(Text.of("Warn Letters Capitalization"), LettersCapitalization.lettersCapitalization.class, ModConfig.warnReasonLetters)
                 .setDefaultValue(LettersCapitalization.lettersCapitalization.LOWER_ALL)
                 .setSaveConsumer(newValue -> ModConfig.warnReasonLetters = newValue)
                 .setTooltip(Text.of("""
@@ -163,7 +162,7 @@ public class ConfigScreen {
                 .build()
         );
         discord.addEntry(entryBuilder
-                .startTextField(Text.of("Time Stamp"),ModConfig.discordTimeStamp)
+                .startTextField(Text.of("Time Stamp"), ModConfig.discordTimeStamp)
                 .setDefaultValue("<t:TIMESTAMP:T>")
                 .setSaveConsumer(newValue -> ModConfig.discordTimeStamp = newValue)
                 .setTooltip(Text.of("""
@@ -171,7 +170,7 @@ public class ConfigScreen {
                 .build()
         );
         discord.addEntry(entryBuilder
-                .startTextField(Text.of("User Name"),ModConfig.discordUserName)
+                .startTextField(Text.of("User Name"), ModConfig.discordUserName)
                 .setDefaultValue("You")
                 .setSaveConsumer(newValue -> ModConfig.discordUserName = newValue)
                 .setTooltip(Text.of("""
@@ -179,7 +178,7 @@ public class ConfigScreen {
                 .build()
         );
         discord.addEntry(entryBuilder
-                .startTextField(Text.of("Open Game Message"),ModConfig.discordOpenGameMessage)
+                .startTextField(Text.of("Open Game Message"), ModConfig.discordOpenGameMessage)
                 .setDefaultValue("Opened the game.")
                 .setSaveConsumer(newValue -> ModConfig.discordOpenGameMessage = newValue)
                 .setTooltip(Text.of("""
@@ -188,7 +187,7 @@ public class ConfigScreen {
                 .build()
         );
         discord.addEntry(entryBuilder
-                .startTextField(Text.of("Close Game Message"),ModConfig.discordCloseGameMessage)
+                .startTextField(Text.of("Close Game Message"), ModConfig.discordCloseGameMessage)
                 .setDefaultValue("Closed the game.")
                 .setSaveConsumer(newValue -> ModConfig.discordCloseGameMessage = newValue)
                 .setTooltip(Text.of("""
@@ -197,7 +196,7 @@ public class ConfigScreen {
                 .build()
         );
         discord.addEntry(entryBuilder
-                .startTextField(Text.of("Join Server Message"),ModConfig.discordJoinServerMessage)
+                .startTextField(Text.of("Join Server Message"), ModConfig.discordJoinServerMessage)
                 .setDefaultValue("Joined server <SERVER>.")
                 .setSaveConsumer(newValue -> ModConfig.discordJoinServerMessage = newValue)
                 .setTooltip(Text.of("""
@@ -206,7 +205,7 @@ public class ConfigScreen {
                 .build()
         );
         discord.addEntry(entryBuilder
-                .startTextField(Text.of("Leave Server Message"),ModConfig.discordLeaveServerMessage)
+                .startTextField(Text.of("Leave Server Message"), ModConfig.discordLeaveServerMessage)
                 .setDefaultValue("Left server <SERVER>.")
                 .setSaveConsumer(newValue -> ModConfig.discordLeaveServerMessage = newValue)
                 .setTooltip(Text.of("""

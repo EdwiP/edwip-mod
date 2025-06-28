@@ -9,12 +9,12 @@ import java.util.concurrent.TimeUnit;
 public class SendMessages {
     private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
-    public static void scheduleTask(int delay , String message) {
+    public static void scheduleTask(int delay, String message) {
         scheduler.schedule(() -> {
             // Execute the delayed action
             sendMessage(message);
         }, delay, TimeUnit.SECONDS);
-    };
+    }
 
     public static void sendMessage(String message) {
         MinecraftClient client = MinecraftClient.getInstance();

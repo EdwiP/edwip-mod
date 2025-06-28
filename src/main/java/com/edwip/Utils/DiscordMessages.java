@@ -1,7 +1,6 @@
 package com.edwip.Utils;
 
 import com.edwip.Menu.ModConfig;
-import com.terraformersmc.modmenu.util.mod.Mod;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
@@ -101,7 +100,7 @@ public class DiscordMessages {
             messageContent = atMatcher.replaceAll("`$1`");
 
             JSONObject json = new JSONObject();
-            json.put("content", ModConfig.discordTimeStamp.replace("TIMESTAMP",timeStamp.toString()) + messageContent);
+            json.put("content", ModConfig.discordTimeStamp.replace("TIMESTAMP", timeStamp.toString()) + messageContent);
             String jsonString = json.toString();
 
             if (isSpecial) {
