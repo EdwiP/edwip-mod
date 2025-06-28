@@ -124,9 +124,8 @@ public class ConfigScreen {
                 .build()
         );
         warn.addEntry(entryBuilder
-                .startStringDropdownMenu(Text.of("Warn Letters Capitalization"), ModConfig.warnReasonLetters)
-                .setSelections(List.of("Lower All", "Upper All", "First Letter" , "First Every Letter"))
-                .setDefaultValue("Lower All")
+                .startEnumSelector(Text.of("Warn Letters Capitalization"),LettersCapitalization.lettersCapitalization.class , ModConfig.warnReasonLetters)
+                .setDefaultValue(LettersCapitalization.lettersCapitalization.LOWER_ALL)
                 .setSaveConsumer(newValue -> ModConfig.warnReasonLetters = newValue)
                 .setTooltip(Text.of("""
                         Change letters capitalization.
