@@ -161,7 +161,8 @@ public class KickCommands {
         if (ModConfig.enableKick && !ModConfig.disableAll) {
             MinecraftClient client = MinecraftClient.getInstance();
             if (!reason.isEmpty()) {
-                reason = switch (ModConfig.kickReasonLetters) {
+                reason = switch (ModConfig.kickReasonLetters.getPrefix()) {
+                    case "No Change" -> reason;
                     case "Lower All" -> reason.toLowerCase();
                     case "Upper All" -> reason.toUpperCase();
                     case "First Letter" -> {
