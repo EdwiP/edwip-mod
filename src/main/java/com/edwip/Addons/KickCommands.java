@@ -14,7 +14,6 @@ import net.minecraft.util.Formatting;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import static com.edwip.Utils.Prefixes.REASON_SUGGESTIONS;
 import static com.edwip.Utils.ToTitleCase.toTitleCase;
@@ -22,8 +21,6 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.arg
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 public class KickCommands {
-    private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-
     public static void doKickCommands() {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             // Set up "Kick Commands" mod, the command itself is still there, but it won't run anything if the setting is turned to OFF
