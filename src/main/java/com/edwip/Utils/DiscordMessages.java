@@ -3,12 +3,15 @@ package com.edwip.Utils;
 import com.edwip.Menu.ModConfig;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -147,17 +150,7 @@ public class DiscordMessages {
                 jsonString = payload.toString();
             }
 
-            URL url = new URL(isSpecial ? ModConfig.discordModeratorWebhookUrl : ModConfig.discordMainWebhookUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setDoOutput(true);
-
-            // Send request
-            try (OutputStream os = connection.getOutputStream()) {
-                byte[] input = jsonString.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
+            HttpURLConnection connection = getHttpURLConnection(isSpecial, jsonString);
 
             // Read response
             int responseCode = connection.getResponseCode();
@@ -175,5 +168,20 @@ public class DiscordMessages {
         } catch (Exception e) {
             LOGGER.error("Exception while sending Discord message", e);
         }
+    }
+
+    private static @NotNull HttpURLConnection getHttpURLConnection(boolean isSpecial, String jsonString) throws URISyntaxException, IOException {
+        URI uri = new URI(isSpecial ? ModConfig.discordModeratorWebhookUrl : ModConfig.discordMainWebhookUrl);
+        HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setDoOutput(true);
+
+        // Send request
+        try (OutputStream os = connection.getOutputStream()) {
+            byte[] input = jsonString.getBytes(StandardCharsets.UTF_8);
+            os.write(input, 0, input.length);
+        }
+        return connection;
     }
 }
