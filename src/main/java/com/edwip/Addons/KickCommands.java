@@ -135,7 +135,7 @@ public class KickCommands {
                     String finalCommand = ModConfig.kickSecondCommand.replace("<PLAYER>",playerName).replace("<REASON>",newReason);
                     SendMessages.sendMessage(finalCommand);
                 }
-            }, ModConfig.kickSecondTime , TimeUnit.MILLISECONDS);
+            }, ModConfig.kickSecondTime, TimeUnit.MILLISECONDS);
             if (!reason.isEmpty()) {
                 reason = switch (ModConfig.kickReasonLetters) {
                     case "Lower All" -> reason.toLowerCase();
