@@ -141,6 +141,80 @@ public class ConfigScreen {
                 .build()
         );
 
+        // Discord Chat Log
+        ConfigCategory discord = builder.getOrCreateCategory(Text.of("Discord Chat Log"));
+        discord.addEntry(entryBuilder
+                .startTextDescription(Text.of("General:"))
+                .build()
+        );
+        discord.addEntry(entryBuilder
+                .startTextField(Text.of("Main Discord Webhook URL"), ModConfig.discordMainWebhookUrl)
+                .setDefaultValue("")
+                .setSaveConsumer(newValue -> ModConfig.discordMainWebhookUrl = newValue)
+                .build()
+        );
+        discord.addEntry(entryBuilder
+                .startTextField(Text.of("Time Stamp"),ModConfig.discordTimeStamp)
+                .setDefaultValue("<t:TIMESTAMP:T>")
+                .setSaveConsumer(newValue -> ModConfig.discordTimeStamp = newValue)
+                .setTooltip(Text.of("""
+                        Time stamp format at the beginning of each message. Leave empty for no time stamp."""))
+                .build()
+        );
+        discord.addEntry(entryBuilder
+                .startTextField(Text.of("User Name"),ModConfig.discordUserName)
+                .setDefaultValue("You")
+                .setSaveConsumer(newValue -> ModConfig.discordUserName = newValue)
+                .setTooltip(Text.of("""
+                        Replace <PLAYER>. Can be used in 4 options below."""))
+                .build()
+        );
+        discord.addEntry(entryBuilder
+                .startTextField(Text.of("Open Game Message"),ModConfig.discordOpenGameMessage)
+                .setDefaultValue("Opened the game.")
+                .setSaveConsumer(newValue -> ModConfig.discordOpenGameMessage = newValue)
+                .setTooltip(Text.of("""
+                        Message after opening game. Leave empty for no message.
+                        Can be used with <PLAYER>"""))
+                .build()
+        );
+        discord.addEntry(entryBuilder
+                .startTextField(Text.of("Close Game Message"),ModConfig.discordCloseGameMessage)
+                .setDefaultValue("Closed the game.")
+                .setSaveConsumer(newValue -> ModConfig.discordCloseGameMessage = newValue)
+                .setTooltip(Text.of("""
+                        Message after closing game. Leave empty for no message.
+                        Can be used with <PLAYER>"""))
+                .build()
+        );
+        discord.addEntry(entryBuilder
+                .startTextField(Text.of("Join Server Message"),ModConfig.discordJoinServerMessage)
+                .setDefaultValue("Joined server <SERVER>.")
+                .setSaveConsumer(newValue -> ModConfig.discordJoinServerMessage = newValue)
+                .setTooltip(Text.of("""
+                        Message after joining servers. Leave empty for no message.
+                        Can be used with <PLAYER>"""))
+                .build()
+        );
+        discord.addEntry(entryBuilder
+                .startTextField(Text.of("Leave Server Message"),ModConfig.discordLeaveServerMessage)
+                .setDefaultValue("Left server <SERVER>.")
+                .setSaveConsumer(newValue -> ModConfig.discordLeaveServerMessage = newValue)
+                .setTooltip(Text.of("""
+                        Message after leaving servers. Leave empty for no message.
+                        Can be used with <PLAYER>"""))
+                .build()
+        );
+        discord.addEntry(entryBuilder
+                .startTextDescription(Text.of("Mineplay:"))
+                .build()
+        );
+        discord.addEntry(entryBuilder
+                .startStrList(Text.of("Custom Messages"), ModConfig.discordMineplayPrivacy)
+                .setDefaultValue(List.of("Hello", "Goodbye"))
+                .setSaveConsumer(newValue -> ModConfig.discordMineplayPrivacy = newValue)
+                .build());
+
         builder.setSavingRunnable(ModConfig::save);
         return builder.build();
     }
