@@ -1,18 +1,18 @@
 {
 	"schemaVersion": 1,
-	"id": "kick-command",
+	"id": "edwip-mod",
 	"version": "${version}",
-	"name": "kick-command",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "edwip-mod",
+	"description": "EdwiP Mod with several Useful mods, generally around Mineplay",
 	"authors": [
-		"Me!"
+		"EdwiP"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/kick-command/icon.png",
+	"icon": "assets/edwip-mod/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"client": [
@@ -24,7 +24,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.16.14",
-		"minecraft": "~1.21.4",
+		"minecraft": ">=1.21.4",
 		"java": ">=21",
 		"fabric-api": "*",
 		"modmenu": "*"

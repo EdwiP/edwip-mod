@@ -1,5 +1,6 @@
 package com.edwip.Menu;
 
+import com.edwip.Utils.LettersCapitalization;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -18,7 +19,6 @@ public class ConfigScreen {
 
         // GENERAL CATEGORY
         ConfigCategory general = builder.getOrCreateCategory(Text.of("General Settings"));
-
         general.addEntry(entryBuilder
                 .startBooleanToggle(Text.of("Disable all"), ModConfig.disableAll)
                 .setDefaultValue(false)
@@ -41,12 +41,21 @@ public class ConfigScreen {
                 .setSaveConsumer(newValue -> ModConfig.enableWarn = newValue)
                 .setTooltip(Text.of("Enable Warn commands."))
                 .build());
+        general.addEntry(entryBuilder
+                .startBooleanToggle(Text.of("Enable Discord Chat Log"), ModConfig.enableDiscordChatLog)
+                .setDefaultValue(false)
+                .setSaveConsumer(newValue -> ModConfig.enableDiscordChatLog = newValue)
+                .setTooltip(Text.of("Enable Discord chat log."))
+                .build());
 
 
 
         // Kick Commands
-
         ConfigCategory kick = builder.getOrCreateCategory(Text.of("Kick Settings"));
+        kick.addEntry(entryBuilder
+                .startTextDescription(Text.of("General:"))
+                .build()
+        );
         kick.addEntry(entryBuilder
                 .startTextField(Text.of("Kick Reason"), ModConfig.kickPrefix)
                 .setDefaultValue("<REASON>, if you continue you will be banned")
@@ -59,15 +68,14 @@ public class ConfigScreen {
                 .build()
         );
         kick.addEntry(entryBuilder
-                .startStringDropdownMenu(Text.of("Kick Letters Capitalization"), ModConfig.kickReasonLetters)
-                .setSelections(List.of("Lower All", "Upper All", "First Letter" , "First Every Letter"))
-                .setDefaultValue("Lower All")
+                .startEnumSelector(Text.of("Kick Letters Capitalization"), LettersCapitalization.lettersCapitalization.class, ModConfig.kickReasonLetters)
+                .setDefaultValue(LettersCapitalization.lettersCapitalization.LOWER_ALL)
                 .setSaveConsumer(newValue -> ModConfig.kickReasonLetters = newValue)
                 .setTooltip(Text.of("""
                         Change letters capitalization.
                         
                         Example: heLLo WOrlD!
-                        Lower all -> hello world!
+                        Lower All -> hello world!
                         Upper All -> HELLO WORLD!
                         First Letter -> Hello world!
                         First Every Letter -> Hello World!
@@ -85,15 +93,14 @@ public class ConfigScreen {
                 .build()
         );
         kick.addEntry(entryBuilder
-                .startStringDropdownMenu(Text.of("Second Command Letters Capitalization"), ModConfig.kickSecondLetters)
-                .setSelections(List.of("Lower All", "Upper All", "First Letter" , "First Every Letter"))
-                .setDefaultValue("Lower All")
+                .startEnumSelector(Text.of("Second Command Letters Capitalization"),LettersCapitalization.lettersCapitalization.class, ModConfig.kickSecondLetters)
+                .setDefaultValue(LettersCapitalization.lettersCapitalization.LOWER_ALL)
                 .setSaveConsumer(newValue -> ModConfig.kickSecondLetters = newValue)
                 .setTooltip(Text.of("""
                         Change letters capitalization for second command executor.
                         
                         Example: heLLo WOrlD!
-                        Lower all -> hello world!
+                        Lower All -> hello world!
                         Upper All -> HELLO WORLD!
                         First Letter -> Hello world!
                         First Every Letter -> Hello World!
@@ -111,7 +118,6 @@ public class ConfigScreen {
                 .build()
         );
         // Warn
-
         ConfigCategory warn = builder.getOrCreateCategory(Text.of("Warn Settings"));
         warn.addEntry(entryBuilder
                 .startTextDescription(Text.of("General:"))

@@ -1,6 +1,5 @@
 package com.edwip.Addons;
 
-import com.edwip.Main;
 import com.edwip.Menu.ModConfig;
 import com.edwip.Utils.CommandSuggestionProviders;
 import com.edwip.Utils.SendMessages;
@@ -13,33 +12,17 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
+import static com.edwip.Utils.Prefixes.REASON_SUGGESTIONS;
 import static com.edwip.Utils.ToTitleCase.toTitleCase;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 public class WarnCommands {
     private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-    private static final List<String> REASON_SUGGESTIONS = List.of(
-            "Griefing",
-            "Spamming",
-            "Spamming blocks",
-            "Racism",
-            "Inappropriate builds",
-            "Inappropriate skin",
-            "Inappropriate behavior",
-            "Homophobia",
-            "Transphobia",
-            "Hate speech",
-            "Links",
-            "QR builds",
-            "Harassment"
 
-    );
     public static void doWarnCommands() {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             // Set up "Kick Commands" mod, the command itself is still there, but it won't run anything if the setting is turned to OFF
@@ -80,7 +63,8 @@ public class WarnCommands {
         assert MinecraftClient.getInstance().player != null;
         if (ModConfig.enableWarn && !ModConfig.disableAll) {
             if (!reason.isEmpty()) {
-                reason = switch (ModConfig.kickReasonLetters) {
+                reason = switch (ModConfig.warnReasonLetters.getPrefix()) {
+                    case "No Change" -> reason;
                     case "Lower All" -> reason.toLowerCase();
                     case "Upper All" -> reason.toUpperCase();
                     case "First Letter" -> {
@@ -91,7 +75,7 @@ public class WarnCommands {
                     case "First Every Letter" -> toTitleCase(reason);
                     default -> reason;
                 };
-                reason = " " + ModConfig.kickPrefix.replace("<REASON>", reason);
+                reason = " " + ModConfig.warnPrefix.replace("<REASON>", reason);
             }
             SendMessages.sendMessage("/warn " + playerName + reason);
         } else {

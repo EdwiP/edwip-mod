@@ -1,53 +1,29 @@
 package com.edwip.Addons;
 
-import com.edwip.Main;
 import com.edwip.Menu.ModConfig;
 import com.edwip.Utils.CommandSuggestionProviders;
 import com.edwip.Utils.SendMessages;
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.awt.desktop.UserSessionEvent;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.suggestion.Suggestions;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.List;
-
+import static com.edwip.Utils.Prefixes.REASON_SUGGESTIONS;
 import static com.edwip.Utils.ToTitleCase.toTitleCase;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 public class KickCommands {
     private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-    private static final List<String> REASON_SUGGESTIONS = List.of(
-            "Griefing",
-            "Spamming",
-            "Spamming blocks",
-            "Racism",
-            "Inappropriate builds",
-            "Inappropriate skin",
-            "Inappropriate behavior",
-            "Homophobia",
-            "Transphobia",
-            "Hate speech",
-            "Links",
-            "QR builds",
-            "Harassment"
 
-    );
     public static void doKickCommands() {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             // Set up "Kick Commands" mod, the command itself is still there, but it won't run anything if the setting is turned to OFF
@@ -121,7 +97,7 @@ public class KickCommands {
             scheduler.schedule(() -> {
                 if (!ModConfig.kickSecondCommand.isEmpty()) {
                     String newReason = oldReason.isEmpty() ? "No reason specified" : oldReason;
-                    newReason = switch (ModConfig.kickSecondLetters) {
+                    newReason = switch (ModConfig.kickSecondLetters.getPrefix()) {
                         case "Lower All" -> newReason.toLowerCase();
                         case "Upper All" -> newReason.toUpperCase();
                         case "First Letter" -> {
@@ -132,12 +108,12 @@ public class KickCommands {
                         case "First Every Letter" -> toTitleCase(newReason);
                         default -> newReason;
                     };
-                    String finalCommand = ModConfig.kickSecondCommand.replace("<PLAYER>",playerName).replace("<REASON>",newReason);
+                    String finalCommand = ModConfig.kickSecondCommand.replace("<PLAYER>", playerName).replace("<REASON>", newReason);
                     SendMessages.sendMessage(finalCommand);
                 }
             }, ModConfig.kickSecondTime, TimeUnit.MILLISECONDS);
             if (!reason.isEmpty()) {
-                reason = switch (ModConfig.kickReasonLetters) {
+                reason = switch (ModConfig.kickReasonLetters.getPrefix()) {
                     case "Lower All" -> reason.toLowerCase();
                     case "Upper All" -> reason.toUpperCase();
                     case "First Letter" -> {

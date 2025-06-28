@@ -1,5 +1,6 @@
 package com.edwip;
 
+import com.edwip.Addons.DiscordChatLog;
 import com.edwip.Addons.KickCommands;
 import com.edwip.Addons.WarnCommands;
 import com.edwip.Menu.ModConfig;
@@ -30,5 +31,6 @@ public class Main implements ClientModInitializer {
         // Set up "/" commands events
         KickCommands.doKickCommands();
         WarnCommands.doWarnCommands();
+        DiscordChatLog.doDiscordChatLog();
     };
 }
