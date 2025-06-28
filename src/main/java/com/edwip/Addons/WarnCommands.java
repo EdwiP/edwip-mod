@@ -21,8 +21,6 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.arg
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 public class WarnCommands {
-    private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-
     public static void doWarnCommands() {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             // Set up "Kick Commands" mod, the command itself is still there, but it won't run anything if the setting is turned to OFF

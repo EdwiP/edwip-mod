@@ -18,8 +18,7 @@ public class DiscordMessages {
     public static final String MOD_ID = "chat-log";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     //WEBHOOK_URL   WEBHOOK_TEST
-    private static final String WEBHOOK_MOD = "https://discord.com/api/webhooks/1387361915801571489/0Qj6W6e9OllxOa75zkc68sjqu3G1iNxa6nM2vBQ6Tc-opBGebLYX3wElUhzY2qqbLf9C";
-
+    
     public static void sendDiscordMessage(String messageContent, Integer timeStamp) {
         try {
             messageContent = messageContent.replaceAll("§.", "");

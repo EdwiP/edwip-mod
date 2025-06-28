@@ -43,6 +43,7 @@ public class ModConfig {
         try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
             GSON.toJson(new Data(), writer);  // Save all values in one pass
         } catch (Exception e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
     }
@@ -83,6 +84,7 @@ public class ModConfig {
                 }
             }
         } catch (Exception e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
     }
