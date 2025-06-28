@@ -1,2 +1,2 @@
 # edwip-mods
-EdwiP's Useful Mods, enerally around Mineplay server
+EdwiP's Useful Mods, generally around Mineplay server
