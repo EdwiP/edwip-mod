@@ -114,6 +114,10 @@ public class ConfigScreen {
 
         ConfigCategory warn = builder.getOrCreateCategory(Text.of("Warn Settings"));
         warn.addEntry(entryBuilder
+                .startTextDescription(Text.of("General:"))
+                .build()
+        );
+        warn.addEntry(entryBuilder
                 .startTextField(Text.of("Warn Reason"), ModConfig.warnPrefix)
                 .setDefaultValue("Please stop <REASON>, if you continue you will be banned")
                 .setSaveConsumer(newValue -> ModConfig.warnPrefix = newValue)
