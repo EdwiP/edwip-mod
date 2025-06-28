@@ -159,8 +159,7 @@ public class KickCommands {
     private static int robloxKickCommand(String playerName, String reason) {
         assert MinecraftClient.getInstance().player != null;
         if (ModConfig.enableKick && !ModConfig.disableAll) {
-            MinecraftClient client = MinecraftClient.getInstance();
-            if (!reason.isEmpty()) {
+             if (!reason.isEmpty()) {
                 reason = switch (ModConfig.kickReasonLetters.getPrefix()) {
                     case "No Change" -> reason;
                     case "Lower All" -> reason.toLowerCase();
