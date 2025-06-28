@@ -1,3 +1,27 @@
 {
-  "text.autoconfig.kickcommand.title": "Kick Command"
+  "edwipmod.title.title": "EdwiP Mod Configuration",
+  "edwipmod.title.general": "General:",
+  "edwipmod.title.mineplay": "Mineplay:",
+
+  "edwipmod.prefix.letter": "Example: heLLo WOrlD!\nLower All -> hello world!\nUpper All -> HELLO WORLD!\nFirst Letter -> Hello world!\nFirst Every Letter -> Hello World!\n\nOption not in the list will keep Reason as the same.",
+
+  "edwipmod.config.general": "General Settings",
+  "edwipmod.config.general.disable_all": "Disable All",
+  "edwipmod.config.general.disable_all.tool_tip": "Disable all mods.",
+  "edwipmod.config.general.kick": "Enable Kick Commands",
+  "edwipmod.config.general.kick.tool_tip": "Enable kick commands.",
+  "edwipmod.config.general.warn": "Enable Warn Commands",
+  "edwipmod.config.general.warn.tool_tip": "Enable Warn commands.",
+  "edwipmod.config.general.discord": "Enable Discord Chat Log",
+  "edwipmod.config.general.discord.tool_tip": "Enable Discord chat log.",
+
+  "edwipmod.config.kick.title": "Kick Settings",
+  "edwipmod.config.kick.reason": "Kick Reason",
+  "edwipmod.config.kick.reason.tool_tip": "Kick reason (replaced by <REASON>).\n/mpkick <Player> <Reason>\n/mprkick <Player> <Reason>\n<Reason> is optional.",
+  "edwipmod.config.kick.letter": "Kick Letters Capitalization",
+  "edwipmod.config.kick.letter.second_command": "Second Command Execution",
+  "edwipmod.config.kick.letter.second_command.tool_tip": "Execute second command after kicking (works only for Minecraft players)\nCan include <PLAYER> and <REASON>.",
+  "edwipmod.config.kick.letter.second_command.letter": "Second Command Letters Capitalization",
+  "edwipmod.config.kick.letter.tool_tip": "Change letters capitalization.",
+  "edwipmod.config.kick.letter.second_command.letter.tool_tip": "Change letters capitalization for second command executor."
 }

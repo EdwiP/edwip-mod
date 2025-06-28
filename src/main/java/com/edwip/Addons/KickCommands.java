@@ -93,25 +93,22 @@ public class KickCommands {
     private static int kickCommand(String playerName, String reason) {
         assert MinecraftClient.getInstance().player != null;
         if (ModConfig.enableKick && !ModConfig.disableAll) {
-            String oldReason = reason;
-            scheduler.schedule(() -> {
-                if (!ModConfig.kickSecondCommand.isEmpty()) {
-                    String newReason = oldReason.isEmpty() ? "No reason specified" : oldReason;
-                    newReason = switch (ModConfig.kickSecondLetters.getPrefix()) {
-                        case "Lower All" -> newReason.toLowerCase();
-                        case "Upper All" -> newReason.toUpperCase();
-                        case "First Letter" -> {
-                            newReason = newReason.toLowerCase();
-                            newReason = Character.toUpperCase(newReason.charAt(0)) + newReason.substring(1);
-                            yield newReason;
-                        }
-                        case "First Every Letter" -> toTitleCase(newReason);
-                        default -> newReason;
-                    };
-                    String finalCommand = ModConfig.kickSecondCommand.replace("<PLAYER>", playerName).replace("<REASON>", newReason);
-                    SendMessages.sendMessage(finalCommand);
-                }
-            }, ModConfig.kickSecondTime, TimeUnit.MILLISECONDS);
+            if (!ModConfig.kickSecondCommand.isEmpty()) {
+                String newReason = reason.isEmpty() ? "No reason specified" : reason;
+                newReason = switch (ModConfig.kickSecondLetters.getPrefix()) {
+                    case "Lower All" -> newReason.toLowerCase();
+                    case "Upper All" -> newReason.toUpperCase();
+                    case "First Letter" -> {
+                        newReason = newReason.toLowerCase();
+                        newReason = Character.toUpperCase(newReason.charAt(0)) + newReason.substring(1);
+                        yield newReason;
+                    }
+                    case "First Every Letter" -> toTitleCase(newReason);
+                    default -> newReason;
+                };
+                String finalCommand = ModConfig.kickSecondCommand.replace("<PLAYER>", playerName).replace("<REASON>", newReason);
+                SendMessages.scheduleTask(ModConfig.kickSecondTime,finalCommand);
+            }
             if (!reason.isEmpty()) {
                 reason = switch (ModConfig.kickReasonLetters.getPrefix()) {
                     case "Lower All" -> reason.toLowerCase();

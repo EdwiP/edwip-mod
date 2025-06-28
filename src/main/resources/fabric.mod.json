@@ -24,16 +24,17 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.16.14",
-		"minecraft": ">=1.21.4",
+		"minecraft": ">=1.21.6",
 		"java": ">=21",
 		"fabric-api": "*",
-		"modmenu": "*"
+		"modmenu": "*",
+		"cloth-config": "*"
 	},
 	"suggests": {
 		"another-mod": "*"
 	},
 	"custom": {
-		"cloth-config": ">=16.0.141",
+		"cloth-config": true,
 		"modmenu:api": true
 	}
 }

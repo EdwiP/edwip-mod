@@ -1,6 +1,6 @@
 package com.edwip.Menu;
 
-import com.edwip.Utils.LettersCapitalization;
+import com.edwip.Utils.Prefixes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -21,13 +21,13 @@ public class ModConfig {
     public static boolean enableDiscordChatLog = false;
     // Kick
     public static String kickPrefix = "Please stop <REASON>, if you continue you will be banned.";
-    public static LettersCapitalization.lettersCapitalization kickReasonLetters = LettersCapitalization.lettersCapitalization.LOWER_ALL;
+    public static Prefixes.lettersCapitalization kickReasonLetters = Prefixes.lettersCapitalization.LOWER_ALL;
     public static int kickSecondTime = 500;
     public static String kickSecondCommand = "/warn -s <PLAYER> <REASON>, kicked warn";
-    public static LettersCapitalization.lettersCapitalization kickSecondLetters = LettersCapitalization.lettersCapitalization.LOWER_ALL;
+    public static Prefixes.lettersCapitalization kickSecondLetters = Prefixes.lettersCapitalization.LOWER_ALL;
     // Warn
     public static String warnPrefix = "Please stop <REASON>, if you continue you will be banned.";
-    public static LettersCapitalization.lettersCapitalization warnReasonLetters = LettersCapitalization.lettersCapitalization.LOWER_ALL;
+    public static Prefixes.lettersCapitalization warnReasonLetters = Prefixes.lettersCapitalization.LOWER_ALL;
     // Discord Chat Log
     public static String discordMainWebhookUrl = "";
     public static String discordModeratorWebhookUrl = "";
@@ -37,7 +37,9 @@ public class ModConfig {
     public static String discordCloseGameMessage = "Closed the game.";
     public static String discordJoinServerMessage = "Joined server <SERVER>.";
     public static String discordLeaveServerMessage = "Left server <SERVER>.";
-    public static List<String> discordMineplayPrivacy = new ArrayList<>(List.of("lobby", "mineplay-48"));
+    public static List<String> discordMineplayPrivacy = Prefixes.skipPatterns;
+    public static List<String> regexPatterns = Prefixes.inputRegex;
+    public static List<String> regexResults = Prefixes.outputFormat;
 
     public static void save() {
         try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
@@ -73,14 +75,16 @@ public class ModConfig {
                 discordJoinServerMessage = data.discordJoinServerMessage;
                 discordLeaveServerMessage = data.discordLeaveServerMessage;
                 discordMineplayPrivacy = new ArrayList<>(data.discordMineplayPrivacy);
+                regexPatterns = new ArrayList<>(data.regexPatterns);
+                regexResults = new ArrayList<>(data.regexResults);
                 try {
-                    kickReasonLetters = LettersCapitalization.lettersCapitalization.valueOf(data.kickReasonLetters);
-                    kickSecondLetters = LettersCapitalization.lettersCapitalization.valueOf(data.kickSecondLetters);
-                    warnReasonLetters = LettersCapitalization.lettersCapitalization.valueOf(data.warnReasonLetters);
+                    kickReasonLetters = Prefixes.lettersCapitalization.valueOf(data.kickReasonLetters);
+                    kickSecondLetters = Prefixes.lettersCapitalization.valueOf(data.kickSecondLetters);
+                    warnReasonLetters = Prefixes.lettersCapitalization.valueOf(data.warnReasonLetters);
                 } catch (IllegalArgumentException e) {
-                    kickReasonLetters = LettersCapitalization.lettersCapitalization.LOWER_ALL; // fallback default
-                    kickSecondLetters = LettersCapitalization.lettersCapitalization.LOWER_ALL;
-                    warnReasonLetters = LettersCapitalization.lettersCapitalization.LOWER_ALL;
+                    kickReasonLetters = Prefixes.lettersCapitalization.LOWER_ALL; // fallback default
+                    kickSecondLetters = Prefixes.lettersCapitalization.LOWER_ALL;
+                    warnReasonLetters = Prefixes.lettersCapitalization.LOWER_ALL;
                 }
             }
         } catch (Exception e) {
@@ -113,6 +117,8 @@ public class ModConfig {
         String discordJoinServerMessage = ModConfig.discordJoinServerMessage;
         String discordLeaveServerMessage = ModConfig.discordLeaveServerMessage;
         List<String> discordMineplayPrivacy = new ArrayList<>(ModConfig.discordMineplayPrivacy);
+        List<String> regexPatterns = new ArrayList<>(ModConfig.regexPatterns);
+        List<String> regexResults = new ArrayList<>(ModConfig.regexResults);
     }
 }
 

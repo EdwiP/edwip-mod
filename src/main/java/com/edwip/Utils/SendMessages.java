@@ -13,7 +13,7 @@ public class SendMessages {
         scheduler.schedule(() -> {
             // Execute the delayed action
             sendMessage(message);
-        }, delay, TimeUnit.SECONDS);
+        }, delay, TimeUnit.MILLISECONDS);
     }
 
     public static void sendMessage(String message) {
