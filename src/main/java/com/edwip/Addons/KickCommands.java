@@ -156,6 +156,7 @@ public class KickCommands {
         }
         return 1;
     }
+
     private static int robloxKickCommand(String playerName, String reason) {
         assert MinecraftClient.getInstance().player != null;
         if (ModConfig.enableKick && !ModConfig.disableAll) {
