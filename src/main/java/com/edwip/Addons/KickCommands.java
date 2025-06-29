@@ -143,7 +143,7 @@ public class KickCommands {
                     case "First Every Letter" -> toTitleCase(reason);
                     default -> reason;
                 };
-                reason = " " + ModConfig.kickPrefix.replace("<REASON>", reason);
+                reason = " \"" + ModConfig.kickPrefix.replace("<REASON>", reason) + "\"";
             }
             SendMessages.sendMessage("/rkick " + playerName + reason);
         } else {
