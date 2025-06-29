@@ -12,9 +12,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-
 import static com.edwip.Utils.Prefixes.REASON_SUGGESTIONS;
 import static com.edwip.Utils.ToTitleCase.toTitleCase;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
