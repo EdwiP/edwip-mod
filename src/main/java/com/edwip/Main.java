@@ -1,8 +1,6 @@
 package com.edwip;
 
-import com.edwip.Addons.DiscordChatLog;
-import com.edwip.Addons.KickCommands;
-import com.edwip.Addons.WarnCommands;
+import com.edwip.Addons.*;
 import com.edwip.Menu.ModConfig;
 import net.fabricmc.api.ClientModInitializer;
 import org.slf4j.Logger;
@@ -21,6 +19,9 @@ public class Main implements ClientModInitializer {
         KickCommands.doKickCommands();
         WarnCommands.doWarnCommands();
         DiscordChatLog.doDiscordChatLog();
+        ChatsWriter.doChatsWriter();
+        SkinCloner.doSkinCloner();
+        ServerSwitcher.doSwitchServer();
     }
 
     @Override

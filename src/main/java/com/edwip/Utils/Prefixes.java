@@ -45,6 +45,7 @@ public class Prefixes {
     public static final List<String> skipPatterns = List.of(
             "^Invalid regex!",
             "^Invalid regex or format!",
+            "^Invalid format!",
             "^\\[Staff\\]",
             "^\\(Silent\\)",
             "^\\[\\S+ -> \\S+]",
@@ -72,6 +73,22 @@ public class Prefixes {
             "^Available servers: lobby(?:, mineplay-\\d+)*$"
     );
 
+    public static final List<String> serverSwitcherResponse = List.of(
+            "Got you. Moving to <SERVER>.",
+            "Te pillé. Trasladándose al <SERVER>."
+    );
+    public static final List<String> serverSwitcherTeleported = List.of(
+        "Moved to server <SERVER>."
+    );
+    public static final List<String> serverSwitcherNotExist = List.of(
+            "The server <SERVER> does not exist."
+    );
+    public static final List<String> serverSwitcherAlreadyHere = List.of(
+            "I'm already in <SERVER>."
+    );
+    public static final List<String> serverSwitcherError = List.of(
+            "Error trying to teleport to the server <SERVER>."
+    );
     public static final List<String> inputRegex = List.of(
             "<(.*?)> (.*)",
             "(\\S*@\\S*)"

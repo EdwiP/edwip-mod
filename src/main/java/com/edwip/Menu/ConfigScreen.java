@@ -40,10 +40,28 @@ public class ConfigScreen {
                 .setTooltip(Text.translatable("edwipmod.config.general.warn.tool_tip"))
                 .build());
         general.addEntry(entryBuilder
+                .startBooleanToggle(Text.translatable("edwipmod.config.general.server_switch"), ModConfig.enableServerSwitcher)
+                .setDefaultValue(false)
+                .setSaveConsumer(newValue -> ModConfig.enableServerSwitcher = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.general.server_switch.tool_tip"))
+                .build());
+        general.addEntry(entryBuilder
                 .startBooleanToggle(Text.translatable("edwipmod.config.general.discord"), ModConfig.enableDiscordChatLog)
                 .setDefaultValue(false)
                 .setSaveConsumer(newValue -> ModConfig.enableDiscordChatLog = newValue)
                 .setTooltip(Text.translatable("edwipmod.config.general.discord.tool_tip"))
+                .build());
+        general.addEntry(entryBuilder
+                .startBooleanToggle(Text.translatable("edwipmod.config.general.chats_writer"), ModConfig.enableChatsWriter)
+                .setDefaultValue(false)
+                .setSaveConsumer(newValue -> ModConfig.enableChatsWriter = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.general.chats_writer.tool_tip"))
+                .build());
+        general.addEntry(entryBuilder
+                .startBooleanToggle(Text.translatable("edwipmod.config.general.skin_cloner"), ModConfig.enableSkinCloner)
+                .setDefaultValue(false)
+                .setSaveConsumer(newValue -> ModConfig.enableSkinCloner = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.general.skin_cloner.tool_tip"))
                 .build());
 
 
@@ -85,9 +103,9 @@ public class ConfigScreen {
         );
 
         kick.addEntry(entryBuilder
-                .startIntSlider(Text.translatable("edwipmod.config.kick.letter.second_command.time"), ModConfig.kickSecondTime, 0, 1000/20)
-                .setDefaultValue(500/20)
-                .setSaveConsumer(newValue -> ModConfig.kickSecondTime = newValue)
+                .startIntSlider(Text.translatable("edwipmod.config.kick.letter.second_command.time"), ModConfig.kickSecondDelay, 0, 1000 / 20)
+                .setDefaultValue(500 / 20)
+                .setSaveConsumer(newValue -> ModConfig.kickSecondDelay = newValue)
                 .setTooltip(Text.translatable("edwipmod.config.kick.letter.second_command.time.tool_tip"))
                 .build()
         );
@@ -113,8 +131,85 @@ public class ConfigScreen {
                 .build()
         );
 
+        // Server Switcher
+
+        ConfigCategory serverSwitcher = builder.getOrCreateCategory(Text.translatable("edwipmod.config.server_switcher.title"));
+        serverSwitcher.addEntry(entryBuilder
+                .startTextDescription(Text.translatable("edwipmod.title.general"))
+                .build());
+
+        serverSwitcher.addEntry(entryBuilder
+                .startBooleanToggle(Text.translatable("edwipmod.config.server_switcher.auto_switch"),ModConfig.serverSwitcherAutoSwitch)
+                .setDefaultValue(true)
+                .setSaveConsumer(newValue -> ModConfig.serverSwitcherAutoSwitch = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.server_switcher.auto_switch.tool_tip"))
+                .build());
+
+        serverSwitcher.addEntry(entryBuilder
+                .startIntSlider(Text.translatable("edwipmod.config.server_switcher.auto_switch.delay"),ModConfig.serverSwitcherAutoSwitchDelay,0,20)
+                .setDefaultValue(5)
+                        .setSaveConsumer(newValue -> ModConfig.serverSwitcherAutoSwitchDelay = newValue)
+                        .setTooltip(Text.translatable("edwipmod.config.server_switcher.auto_switch.delay.tool_tip"))
+                .build());
+
+        serverSwitcher.addEntry(entryBuilder
+                .startIntSlider(Text.translatable("edwipmod.config.server_switcher.auto_switch.delay_error"),ModConfig.serverSwitcherDelayBeforeError,0,100)
+                .setDefaultValue(100)
+                .setSaveConsumer(newValue -> ModConfig.serverSwitcherDelayBeforeError = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.server_switcher.auto_switch.delay_error.tool_tip"))
+                .build()
+        );
+
+        serverSwitcher.addEntry(entryBuilder
+                .startTextField(Text.translatable("edwipmod.config.server_switcher.auto_switch.prefix"),ModConfig.serverSwitcherPrefix)
+                .setDefaultValue("Teleport")
+                .setSaveConsumer(newValue -> ModConfig.serverSwitcherPrefix = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.server_switcher.auto_switch.prefix.tool_tip"))
+                .build());
+
+        serverSwitcher.addEntry(entryBuilder
+                .startStrList(Text.translatable("edwipmod.config.server_switcher.auto_switch.response"),ModConfig.serverSwitcherResponse)
+                .setDefaultValue(Prefixes.serverSwitcherResponse)
+                .setSaveConsumer(newValue -> ModConfig.serverSwitcherResponse = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.server_switcher.auto_switch.response.tool_tip")
+                        .append("\n").append(Text.translatable("edwipmod.prefix.server_switcher.server")))
+                .build());
+
+        serverSwitcher.addEntry(entryBuilder
+                .startStrList(Text.translatable("edwipmod.config.server_switcher.auto_switch.teleported"),ModConfig.serverSwitcherTeleported)
+                .setDefaultValue(Prefixes.serverSwitcherTeleported)
+                .setSaveConsumer(newValue -> ModConfig.serverSwitcherTeleported = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.server_switcher.auto_switch.teleported.tool_tip")
+                        .append("\n").append(Text.translatable("edwipmod.prefix.server_switcher.server")))
+                .build());
+
+        serverSwitcher.addEntry(entryBuilder
+                .startStrList(Text.translatable("edwipmod.config.server_switcher.auto_switch.not_exist"),ModConfig.serverSwitcherNotExist)
+                .setDefaultValue(Prefixes.serverSwitcherNotExist)
+                .setSaveConsumer(newValue -> ModConfig.serverSwitcherNotExist = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.server_switcher.auto_switch.teleported.tool_tip")
+                        .append("\n").append(Text.translatable("edwipmod.prefix.server_switcher.server")))
+                .build());
+
+        serverSwitcher.addEntry(entryBuilder
+                .startStrList(Text.translatable("edwipmod.config.server_switcher.auto_switch.already_here"),ModConfig.serverSwitcherAlreadyHere)
+                .setDefaultValue(Prefixes.serverSwitcherAlreadyHere)
+                .setSaveConsumer(newValue -> ModConfig.serverSwitcherAlreadyHere = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.server_switcher.auto_switch.already_here.tool_tip")
+                        .append("\n").append(Text.translatable("edwipmod.prefix.server_switcher.server")))
+                .build());
+
+        serverSwitcher.addEntry(entryBuilder
+                .startStrList(Text.translatable("edwipmod.config.server_switcher.auto_switch.error"),ModConfig.serverSwitcherError)
+                .setDefaultValue(Prefixes.serverSwitcherError)
+                .setSaveConsumer(newValue -> ModConfig.serverSwitcherError = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.server_switcher.auto_switch.error.tool_tip")
+                        .append("\n").append(Text.translatable("edwipmod.prefix.server_switcher.server")))
+                .build());
+
+
         // Discord Chat Log
-        ConfigCategory discord = builder.getOrCreateCategory(Text.translatable("edwipmod.config.discord.category"));
+        ConfigCategory discord = builder.getOrCreateCategory(Text.translatable("edwipmod.config.discord.title"));
         discord.addEntry(entryBuilder
                 .startTextDescription(Text.translatable("edwipmod.title.general"))
                 .build());
@@ -123,6 +218,13 @@ public class ConfigScreen {
                 .startTextField(Text.translatable("edwipmod.config.discord.webhook"), ModConfig.discordMainWebhookUrl)
                 .setDefaultValue("")
                 .setSaveConsumer(newValue -> ModConfig.discordMainWebhookUrl = newValue)
+                .build());
+
+        discord.addEntry(entryBuilder
+                        .startIntSlider(Text.translatable("edwipmod.config.discord.delay"),ModConfig.discordDelay,5,20)
+                        .setDefaultValue(10)
+                        .setSaveConsumer(newValue -> ModConfig.discordDelay = newValue)
+                        .setTooltip(Text.translatable("edwipmod.config.discord.delay.tool_tip"))
                 .build());
 
         discord.addEntry(entryBuilder
@@ -146,7 +248,7 @@ public class ConfigScreen {
                 .setDefaultValue("Opened the game.")
                 .setSaveConsumer(newValue -> ModConfig.discordOpenGameMessage = newValue)
                 .setTooltip(Text.translatable("edwipmod.config.discord.open.tooltip")
-                        .append("\n").append(Text.translatable("edwipmod.prefix.discord.no_message"))
+                        .append("\n").append(Text.translatable("edwipmod.prefix.no_message"))
                         .append("\n").append(Text.translatable("edwipmod.prefix.discord.player"))
                         .append("\n").append(Text.translatable("edwipmod.prefix.discord.discord_format")))
                 .build());
@@ -156,7 +258,7 @@ public class ConfigScreen {
                 .setDefaultValue("Closed the game.")
                 .setSaveConsumer(newValue -> ModConfig.discordCloseGameMessage = newValue)
                 .setTooltip(Text.translatable("edwipmod.config.discord.close.tooltip")
-                        .append("\n").append(Text.translatable("edwipmod.prefix.discord.no_message"))
+                        .append("\n").append(Text.translatable("edwipmod.prefix.no_message"))
                         .append("\n").append(Text.translatable("edwipmod.prefix.discord.player"))
                         .append("\n").append(Text.translatable("edwipmod.prefix.discord.discord_format")))
                 .build());
@@ -166,7 +268,7 @@ public class ConfigScreen {
                 .setDefaultValue("Joined server <SERVER>.")
                 .setSaveConsumer(newValue -> ModConfig.discordJoinServerMessage = newValue)
                 .setTooltip(Text.translatable("edwipmod.config.discord.join.tooltip")
-                        .append("\n").append(Text.translatable("edwipmod.prefix.discord.no_message"))
+                        .append("\n").append(Text.translatable("edwipmod.prefix.no_message"))
                         .append("\n").append(Text.translatable("edwipmod.prefix.discord.player"))
                         .append("\n").append(Text.translatable("edwipmod.prefix.discord.discord_format")))
                 .build());
@@ -176,13 +278,20 @@ public class ConfigScreen {
                 .setDefaultValue("Left server <SERVER>.")
                 .setSaveConsumer(newValue -> ModConfig.discordLeaveServerMessage = newValue)
                 .setTooltip(Text.translatable("edwipmod.config.discord.leave.tooltip")
-                        .append("\n").append(Text.translatable("edwipmod.prefix.discord.no_message"))
+                        .append("\n").append(Text.translatable("edwipmod.prefix.no_message"))
                         .append("\n").append(Text.translatable("edwipmod.prefix.discord.player"))
                         .append("\n").append(Text.translatable("edwipmod.prefix.discord.discord_format")))
                 .build());
 
         discord.addEntry(entryBuilder
                 .startTextDescription(Text.translatable("edwipmod.title.mineplay"))
+                .build());
+
+        discord.addEntry(entryBuilder
+                .startTextField(Text.translatable("edwipmod.config.discord.moderator_webhook"), ModConfig.discordModeratorWebhookUrl)
+                .setDefaultValue("")
+                .setSaveConsumer(newValue -> ModConfig.discordModeratorWebhookUrl = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.discord.moderator_webhook.tool_tip"))
                 .build());
 
         discord.addEntry(entryBuilder
@@ -205,6 +314,69 @@ public class ConfigScreen {
                 .setTooltip(Text.translatable("edwipmod.config.discord.outputs.tooltip"))
                 .build());
 
+        // Chats Writer
+        ConfigCategory chatsWriter = builder.getOrCreateCategory(Text.translatable("edwipmod.config.chats_writer.title"));
+
+        chatsWriter.addEntry(entryBuilder
+                .startTextDescription(Text.translatable("edwipmod.title.general"))
+                .build());
+
+        chatsWriter.addEntry(entryBuilder
+                .startStrField(Text.translatable("edwipmod.config.chats_writer.file_name"), ModConfig.chatsWriterFileName)
+                .setDefaultValue("chats")
+                .setSaveConsumer(newValue -> ModConfig.chatsWriterFileName = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.chats_writer.file_name.tool_tip"))
+                .build());
+
+        chatsWriter.addEntry(entryBuilder
+                .startStrField(Text.translatable("edwipmod.config.chats_writer.username"), ModConfig.chatsWriterUserName)
+                .setDefaultValue("You")
+                .setSaveConsumer(newValue -> ModConfig.chatsWriterUserName = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.chats_writer.username.tool_tip"))
+                .build());
+
+        chatsWriter.addEntry(entryBuilder
+                .startStrField(Text.translatable("edwipmod.config.chats_writer.date_format"), ModConfig.chatsWriterDateFormat)
+                .setDefaultValue("yyyy/MM/dd HH:mm:ss")
+                .setSaveConsumer(newValue -> ModConfig.chatsWriterDateFormat = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.chats_writer.date_format.tool_tip")
+                        .append("\n").append(Text.translatable("edwipmod.prefix.no_message")))
+                .build());
+
+
+        chatsWriter.addEntry(entryBuilder
+                .startTextField(Text.translatable("edwipmod.config.chats_writer.open"), ModConfig.discordOpenGameMessage)
+                .setDefaultValue("Opened the game.")
+                .setSaveConsumer(newValue -> ModConfig.discordOpenGameMessage = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.chats_writer.open.tooltip")
+                        .append("\n").append(Text.translatable("edwipmod.prefix.no_message")))
+                .build());
+
+        chatsWriter.addEntry(entryBuilder
+                .startTextField(Text.translatable("edwipmod.config.chats_writer.close"), ModConfig.discordCloseGameMessage)
+                .setDefaultValue("Closed the game.")
+                .setSaveConsumer(newValue -> ModConfig.discordCloseGameMessage = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.chats_writer.close.tooltip")
+                        .append("\n").append(Text.translatable("edwipmod.prefix.no_message")))
+                .build());
+
+        chatsWriter.addEntry(entryBuilder
+                .startTextField(Text.translatable("edwipmod.config.chats_writer.join"), ModConfig.discordJoinServerMessage)
+                .setDefaultValue("Joined server <SERVER>.")
+                .setSaveConsumer(newValue -> ModConfig.discordJoinServerMessage = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.chats_writer.join.tooltip")
+                        .append("\n").append(Text.translatable("edwipmod.prefix.no_message")))
+                .build());
+
+        chatsWriter.addEntry(entryBuilder
+                .startTextField(Text.translatable("edwipmod.config.chats_writer.leave"), ModConfig.discordLeaveServerMessage)
+                .setDefaultValue("Left server <SERVER>.")
+                .setSaveConsumer(newValue -> ModConfig.discordLeaveServerMessage = newValue)
+                .setTooltip(Text.translatable("edwipmod.config.chats_writer.leave.tooltip")
+                        .append("\n").append(Text.translatable("edwipmod.prefix.no_message")))
+                .build());
+
+        // Skin Cloner
 
         builder.setSavingRunnable(ModConfig::save);
         return builder.build();

@@ -63,7 +63,7 @@ public class DiscordChatLog {
 
 
     private static void sendMessage(String content) {
-        if (ModConfig.enableDiscordChatLog)
+        if (ModConfig.enableDiscordChatLog && !ModConfig.disableAll)
             messageQueue.offer(new AbstractMap.SimpleEntry<>(content, Math.toIntExact(Instant.now().getEpochSecond())));
     }
 
@@ -71,9 +71,8 @@ public class DiscordChatLog {
         while (true) {
             try {
                 Map.Entry<String, Integer> entry = messageQueue.take();
-
                 sendDiscordMessage(entry.getKey(), entry.getValue());
-                Thread.sleep(250); // ~4 msg/sec (Discord allows 5/sec)
+                Thread.sleep(ModConfig.discordDelay/20 * 1000L); // ~4 msg/sec (Discord allows 5/sec)
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 break;
@@ -101,26 +100,11 @@ public class DiscordChatLog {
                             "|^(\\S+) unbanned (\\S+) for '(.*?)'$" +
                             "|^(\\S+) ummuted (\\S+) for '(.*?)'$"
             );
-            if (specialPattern.matcher(messageContent).find()) {
-                // Make the text bold in discord format
+            if (specialPattern.matcher(messageContent).find() && !ModConfig.discordModeratorWebhookUrl.isEmpty()) {
                 isSpecial = true;
-            }
-            if (!isSpecial) {
-                Pattern joinPattern = Pattern.compile(
-                        "^\\[\\+]"
-                );
-                if (joinPattern.matcher(messageContent).find()) {
-                    // Make the text italic in discord format
-                    messageContent = "*" + messageContent + "*";
-                }
             }
 
             messageContent = applyRegexConversions(messageContent);
-
-            Pattern atPattern = Pattern.compile("(@\\S+)");
-            Matcher atMatcher = atPattern.matcher(messageContent);
-
-            messageContent = atMatcher.replaceAll("`$1`");
 
             JSONObject json = new JSONObject();
             json.put("content", ModConfig.discordTimeStamp.replace("TIMESTAMP", timeStamp.toString()) + messageContent);
@@ -213,15 +197,22 @@ public class DiscordChatLog {
             try {
                 Pattern p = Pattern.compile(pattern);
                 Matcher matcher = p.matcher(input);
-                if (matcher.find()) {
+
+                StringBuffer result = new StringBuffer();
+
+                while (matcher.find()) {
+                    // Process the format string with placeholders replaced by matched groups
                     StringBuilder sb = new StringBuilder();
-                    Pattern placeholderPattern = Pattern.compile("\\((\\d+)\\)");
+                    Pattern placeholderPattern = Pattern.compile("\\$(\\d+)|\\((\\d+)\\)");
                     Matcher formatMatcher = placeholderPattern.matcher(format);
 
                     int lastEnd = 0;
                     while (formatMatcher.find()) {
                         sb.append(format, lastEnd, formatMatcher.start());
-                        int groupNum = Integer.parseInt(formatMatcher.group(1));
+
+                        String groupStr = formatMatcher.group(1) != null ? formatMatcher.group(1) : formatMatcher.group(2);
+                        int groupNum = Integer.parseInt(groupStr);
+
                         String groupText = "";
                         if (groupNum <= matcher.groupCount() && matcher.group(groupNum) != null) {
                             groupText = matcher.group(groupNum);
@@ -231,8 +222,14 @@ public class DiscordChatLog {
                     }
                     sb.append(format.substring(lastEnd));
 
-                    return sb.toString();
+                    // Replace current match with the processed replacement string
+                    matcher.appendReplacement(result, Matcher.quoteReplacement(sb.toString()));
                 }
+                matcher.appendTail(result);
+
+                // Return replaced string
+                return result.toString();
+
             } catch (Exception e) {
                 if (MinecraftClient.getInstance().player != null) {
                     MinecraftClient.getInstance().player.sendMessage(

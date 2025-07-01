@@ -1,5 +1,6 @@
 package com.edwip.Addons;
 
+import com.edwip.Main;
 import com.edwip.Menu.ModConfig;
 import com.edwip.Utils.CommandSuggestionProviders;
 import com.edwip.Utils.SendMessages;
@@ -86,7 +87,9 @@ public class KickCommands {
 
     private static int kickCommand(String playerName, String reason) {
         assert MinecraftClient.getInstance().player != null;
+        Main.LOGGER.warn("Debugged");
         if (ModConfig.enableKick && !ModConfig.disableAll) {
+            Main.LOGGER.warn("Debugged inside");
             if (!ModConfig.kickSecondCommand.isEmpty()) {
                 String newReason = reason.isEmpty() ? "No reason specified" : reason;
                 newReason = switch (ModConfig.kickSecondLetters.getPrefix()) {
@@ -101,7 +104,7 @@ public class KickCommands {
                     default -> newReason;
                 };
                 String finalCommand = ModConfig.kickSecondCommand.replace("<PLAYER>", playerName).replace("<REASON>", newReason);
-                SendMessages.scheduleTask(ModConfig.kickSecondTime,finalCommand);
+                SendMessages.scheduleTask(ModConfig.kickSecondDelay / 20 * 1000, finalCommand);
             }
             if (!reason.isEmpty()) {
                 reason = switch (ModConfig.kickReasonLetters.getPrefix()) {
@@ -116,9 +119,11 @@ public class KickCommands {
                     default -> reason;
                 };
                 reason = " " + ModConfig.kickPrefix.replace("<REASON>", reason);
-            }
+            } else
+                MinecraftClient.getInstance().player.sendMessage(Text.literal("Reason is empty!").formatted(Formatting.RED), false);
             SendMessages.sendMessage("/kick " + playerName + reason);
-        } else {
+        }
+        else {
             MinecraftClient.getInstance().player.sendMessage(Text.literal("Kick Commands mod is Disabled!").formatted(Formatting.RED), false);
         }
         return 1;

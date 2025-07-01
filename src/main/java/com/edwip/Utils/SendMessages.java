@@ -18,7 +18,7 @@ public class SendMessages {
 
     public static void sendMessage(String message) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player != null) {
+        if (client.player != null && !message.isEmpty()) {
 
             if (message.startsWith("/")) {
                 // It's a command
