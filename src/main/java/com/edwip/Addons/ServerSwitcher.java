@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.GenericContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -14,6 +15,7 @@ import net.minecraft.item.Items;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Hand;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -24,12 +26,14 @@ public class ServerSwitcher {
     private static final Pattern alreadyConnected = Pattern.compile("^You are already connected to this server!$");
     private static final Pattern notExist = Pattern.compile("^The specified server (.*?) does not exist.$");
     private static final Pattern serverConnect = Pattern.compile("^\\[Mineplay] Do /blocks to choose your blocks!$");
+    private static final Pattern unableToConnect = Pattern.compile("^Unable to connect you to (.*?). Please try again later.$");
 
     private static boolean allowToPerform = false;
     private static String server = "lobby";
     private static boolean isTeleportable = false;
     private static String oldServer = "lobby";
     private static boolean isTeleporting = false;
+    private static final List<String> failedServers = new ArrayList<>();
 
     // This logger is used to write text to the console and the log file.
     // It is considered best practice to use your mod id as the logger's name.
@@ -57,7 +61,8 @@ public class ServerSwitcher {
                         SendMessages.sendMessage(getRandomTemplate(ModConfig.serverSwitcherError).replace("<SERVER>", target));
                     }
                 } catch (Exception exception) {
-                    exception.printStackTrace();
+                    //exception.printStackTrace();
+                    Main.LOGGER.error("Error while trying to teleport", exception);
                 }
             }
 
@@ -83,6 +88,12 @@ public class ServerSwitcher {
                     SendMessages.sendMessage(getRandomTemplate(ModConfig.serverSwitcherTeleported).replace("<SERVER>", oldServer));
                 }
             }
+
+            matcher = unableToConnect.matcher(message);
+            if (matcher.find()) {
+                failedServers.add(matcher.group(1));
+                tryAutoSwitch(MinecraftClient.getInstance().currentScreen);
+            }
         }).start();
     }
 
@@ -107,36 +118,21 @@ public class ServerSwitcher {
                         client.interactionManager.interactItem(client.player, Hand.MAIN_HAND);
                     }
                 } catch (InterruptedException exception) {
-                    exception.printStackTrace();
+                    //exception.printStackTrace();
+                    Main.LOGGER.error("Error while trying to switch server", exception);
                 }
             }).start();
         });
+        ClientPlayConnectionEvents.DISCONNECT.register((clientPlayNetworkHandler, minecraftClient) -> {
+            allowToPerform = false;
+            isTeleportable = false;
+            isTeleporting = false;
+            server = "lobby";
+            oldServer = "lobby";
+            failedServers.clear();
+        });
         ScreenEvents.AFTER_INIT.register((minecraftClient, screen, scaledWidth, scaledHeight) -> {
-            if (ModConfig.disableAll || !ModConfig.serverSwitcherAutoSwitch || !allowToPerform) return;
-            new Thread(() -> {
-                try {
-                    if (screen instanceof GenericContainerScreen genericContainerScreen) {
-                        if (!isTeleportable) return;
-                        isTeleportable = false;
-                        ItemStack result = ItemStack.EMPTY;
-                        int chestSlotCount = genericContainerScreen.getScreenHandler().slots.size() - 36;
-                        Thread.sleep(100);
-                        for (int i = chestSlotCount - 1; i >= 0; i--) {
-                            Slot slot = genericContainerScreen.getScreenHandler().slots.get(i);
-                            ItemStack stack = slot.getStack();
-                            Main.LOGGER.warn(stack.getFormattedName().getString());
-                            if (!stack.isEmpty() && stack.getItem() == Items.GRASS_BLOCK) {
-                                result = stack;
-                                SendMessages.sendMessage("/server " + result.getFormattedName().getString());
-                                Main.LOGGER.warn(result.getFormattedName().getString());
-                                break;
-                            }
-                        }
-                    }
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                };
-            }).start();
+            tryAutoSwitch(screen);
         });
         ClientReceiveMessageEvents.GAME.register((text, overlay) -> {
             handleMessage(text.getString());
@@ -144,6 +140,36 @@ public class ServerSwitcher {
         ClientReceiveMessageEvents.CHAT.register((text, signedMessage, gameProfile, parameters, instant) -> {
             handleMessage(text.getString());
         });
+    }
+
+    private static void tryAutoSwitch(Screen screen) {
+        if (ModConfig.disableAll || !ModConfig.serverSwitcherAutoSwitch || !allowToPerform) return;
+        new Thread(() -> {
+            try {
+                if (screen instanceof GenericContainerScreen genericContainerScreen) {
+                    if (!isTeleportable) return;
+                    isTeleportable = false;
+                    ItemStack result = ItemStack.EMPTY;
+                    int chestSlotCount = genericContainerScreen.getScreenHandler().slots.size() - 36;
+                    Thread.sleep(100);
+                    for (int i = chestSlotCount - 1; i >= 0; i--) {
+                        Slot slot = genericContainerScreen.getScreenHandler().slots.get(i);
+                        ItemStack stack = slot.getStack();
+                        Main.LOGGER.warn(stack.getFormattedName().getString());
+                        if (!stack.isEmpty() && stack.getItem() == Items.GRASS_BLOCK) {
+                            result = stack;
+                            if (failedServers.contains(result.getFormattedName().getString())) continue;
+                            SendMessages.sendMessage("/server " + result.getFormattedName().getString());
+                            Main.LOGGER.warn(result.getFormattedName().getString());
+                            break;
+                        }
+                    }
+                }
+            } catch (Exception exception) {
+                //exception.printStackTrace();
+                Main.LOGGER.error("Error while trying to auto switch server", exception);
+            }
+        }).start();
     }
 
     private static String getRandomTemplate(List<String> list) {
